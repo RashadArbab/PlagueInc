@@ -71,7 +71,7 @@ public class Country {
 		if (infectedPopulation >= ( populationCurrent/2) || (dead >= (0.10 * populationInitial))) {
 			double odds =  Math.random() ;
 			odds = odds* cureMultiplier ; 
-			if (odds >= 0.40) {
+			if (odds >= 0.50) {
 				cure = cure +0.01; 
 			}
 			System.out.println("The cure is at " + (int) cure*100 + " percent"); 
@@ -85,7 +85,7 @@ public class Country {
 			odds = odds * infectivity; 
 			
 				if (infectedPopulation < populationCurrent) { 
-					if (odds >= 0.85) {
+					if (odds >= 0.90) {
 						this.infectedPopulation ++; 
 					
 					}
