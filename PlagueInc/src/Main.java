@@ -7,7 +7,7 @@ public class Main {
 		int turn = 0 ; 
 		boolean gameOver = false; 
 			
-		Country country = new Country(100000000);
+		Country country = new Country(10000000);
 		Scanner scan = new Scanner(System.in); 
 		
 		
@@ -75,6 +75,7 @@ public class Main {
 					if (response == 3) {
 							if (dnaPoints >= 4) {
 							country.slowCure()  ; 
+							dnaPoints = dnaPoints -4; 
 						}
 						else { 
 							System.out.println("");
