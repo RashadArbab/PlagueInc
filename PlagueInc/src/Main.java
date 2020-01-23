@@ -1,19 +1,35 @@
 import java.util.*; 
 public class Main {
 
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
 		int turn = 0 ; 
 		boolean gameOver = false; 
 			
-		Country country = new Country(10000000);
+		Country countryA = new Country(100000000);
+		Country countryB = new Country(100000000);
+		
+		
+		
+		countryB.increaseInfection(1);
+		 
+		List<Country> countries = new ArrayList<Country>() ;  
+		
+		countries.add(countryA);
+		countries.add(countryB); 
+		
+		
+		World world = new World(countries); 
+		 
+		//world.spread(); 
+		
 		Scanner scan = new Scanner(System.in); 
 		
-		
-		System.out.println(country.getPopulationCurrent() + " current at start") ;
-		System.out.println(country.getPopulationInitial() + " initial at start");
-		System.out.println(country.getInfectedPopulation() + " infected at start"); 
+		System.out.println(countryA.getPopulationCurrent() + " current at start") ;
+		System.out.println(countryA.getPopulationInitial() + " initial at start");
+		System.out.println(countryA.getInfectedPopulation() + " infected at start"); 
 		
 		
 		int month = 1; 
@@ -22,6 +38,11 @@ public class Main {
 		
 		while (gameOver == false ) { 
 			turn = turn + 1 ;
+			
+			
+			System.out.println(world.getInfectedPopulation() + " infected world pop");
+			System.out.println(world.getPopulation() + " current world population");
+			
 			
 			if (turn % 30  == 0) {
 				System.out.println("Month: " + month); 
@@ -40,7 +61,7 @@ public class Main {
 					
 					if (response == 1) {
 						if (dnaPoints >= 5 ) {
-							country.increaseInfectivity(); 
+							world.increaseInfectivity(); 
 							dnaPoints = dnaPoints - 5; 
 						}
 						else {
@@ -56,7 +77,7 @@ public class Main {
 					}
 					else if (response == 2) {
 						if (dnaPoints >= 3) {
-							country.increaseLethality() ; 
+							world.increaseLethality() ; 
 							dnaPoints = dnaPoints -3; 
 						}
 						else { 
@@ -74,7 +95,7 @@ public class Main {
 					
 					if (response == 3) {
 							if (dnaPoints >= 4) {
-							country.slowCure()  ; 
+							world.slowCure()  ; 
 							dnaPoints = dnaPoints -4; 
 						}
 						else { 
@@ -98,31 +119,40 @@ public class Main {
 				
 			}
 			
-			 
-			System.out.println("********************************************************************");
-			
-			country.death(); 
-			country.increaseInfection() ;
-			country.cure();
-			
-			System.out.println(country.getInfectedPopulation() + " population infected"); 
-			System.out.println(country.getPopulationCurrent() + " population current") ;
-			System.out.println(country.getDead() + " dead"); 
-			System.out.println("The cure is at " +  Math.round(country.getCure() *  100.0)  + " percent"); 
+			System.out.println("");
+			System.out.println("");
 			System.out.println(""); 
 			
-			if (country.getPopulationCurrent() == 0) {
+			System.out.println("********************************************************************");
+			world.increaseInfection() ;
+			world.spread();
+			world.death(); 
+			world.cure();
+			
+			System.out.println("Population infected");
+			System.out.println("Country A: " + countryA.getInfectedPopulation()  + " Country B: " + countryB.getInfectedPopulation());
+			System.out.println("");
+			System.out.println("Population Current");
+			System.out.println("Country A: " + countryA.getPopulationCurrent()  + " Country B: " + countryB.getPopulationCurrent());
+			System.out.println("");
+			System.out.println("Population Dead ");
+			System.out.println("Country A: " + countryA.getDead()  + " Country B: " + countryB.getDead());
+			System.out.println("");
+			System.out.println("The cure is at " +  Math.round(world.getCure() *  100.0)  + " percent"); 
+			System.out.println(""); 
+			System.out.flush();
+			if (world.getPopulation() == 0) {
 				gameOver = true; 
 				System.out.println("!!!!!!!The whole world is dead!!!!!!!!"); 
 			}
 			
 			
-			else if (country.getInfectedPopulation() == 0) {
+			else if (world.getInfectedPopulation() == 0) {
 				gameOver = true; 
 				System.out.println("!!!!!!!There are no more infected people left!!!!!!!");
 			}
 			
-			else if (country.getCure() >= 1) {
+			else if (world.getCure() >= 1) {
 				gameOver = true; 
 				System.out.println("You Lose!!!!! A cure was found!!!"); 
 			}
@@ -136,27 +166,24 @@ public class Main {
 			
 		}
 		
-		if (country.getCure() == 0.00) {
-			System.out.println("Work on the cure has yet to begin") ; 
-		}
-		else {
-		System.out.println("The cure is at " + Math.round(country.getCure()* 100) + " percent");
-		} 
-		System.out.println("Cure Multiplier: " + country.getCureMultiplier());
-		System.out.println("Lethality: " + country.getLethality()) ; 
-		System.out.println("Infectivity: " + country.getInfectivity()) ; 
+		 
+		System.out.println("Cure Multiplier: " + countryA.getCureMultiplier());
+		System.out.println("Lethality: " + countryA.getLethality()) ; 
+		System.out.println("Infectivity: " + countryA.getInfectivity()) ; 
 		System.out.println("Month " + month);
-		if (country.getPopulationCurrent() == 0) {
+		if (world.getPopulation() == 0) {
 		System.out.println("It took " +turn+ " turns to kill the world"); 
 		}
-		else if (country.getCure() >= 1) {
+		else if (world.getCure() >= 1) {
 			System.out.println("It took " + turn + " to find the cure");
 		}
 		else {
 			System.out.println("Everyone with the virus is dead. It took " + turn + " turns"); 
 		}
-		System.out.println("Population Alive: " + country.getPopulationCurrent()  ); 
-		System.out.println("Population dead: " + country.getDead() );
-		System.out.println("Infected Population " + country.getInfectedPopulation());
+		System.out.println("Population Alive: " + world.getPopulation()  ); 
+		System.out.println("Population dead: " + world.getDead() );
+		System.out.println("Infected Population " + world.getInfectedPopulation());
 	}
+	
+	
 }

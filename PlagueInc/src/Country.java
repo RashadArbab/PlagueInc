@@ -13,7 +13,7 @@ public class Country {
 		
 		this.populationInitial = population; 
 		this.populationCurrent = population; 
-		this.infectedPopulation = 1; 
+		this.infectedPopulation = 0;
 		this.cureMultiplier = 1.00; 
 	}
 	
@@ -41,6 +41,14 @@ public class Country {
 	
 	public double getLethality() {
 		return this.lethality; 
+	}
+	
+	public void increasePopulation() {
+		this.populationCurrent ++; 
+	}
+	
+	public void decreasePopulation() {
+		this.populationCurrent --; 
 	}
 	
 	public void increaseInfectivity() {
@@ -71,32 +79,33 @@ public class Country {
 		if (infectedPopulation >= ( populationCurrent/2) || (dead >= (0.10 * populationInitial))) {
 			double odds =  Math.random() ;
 			odds = odds* cureMultiplier ; 
-			if (odds >= 0.50) {
+			if (odds >= 0.75) {
 				cure = cure +0.01; 
 			}
 			System.out.println("The cure is at " + (int) cure*100 + " percent"); 
 		}
 	}
 	
+	public void increaseInfection(int i) {
+		infectedPopulation = infectedPopulation + i; 
+	}
+	
+	
 	public void increaseInfection () {
 		if (infectedPopulation < populationCurrent) {
-			for (int i = 0 ; i <= infectedPopulation; i ++) {
-			double odds =   Math.random() ;
-			odds = odds * infectivity; 
+			double odds = Math.random();
 			
-				if (infectedPopulation < populationCurrent) { 
-					if (odds >= 0.90) {
-						this.infectedPopulation ++; 
-					
-					}
-			
-				}
+			if (infectedPopulation == 1) {
+				infectedPopulation = infectedPopulation +3; 
 			}
+			else {
+				double pop =  (infectedPopulation * ((0.3 * odds * infectivity + 1))) ; 
+				infectedPopulation = (int) pop; 
+				if (infectedPopulation >= populationCurrent) {
+					infectedPopulation = populationCurrent; 
+				}
+			}		
 		}
-		else {
-			
-		}
-		
 	}
 	
 	public void death() {
@@ -111,8 +120,7 @@ public class Country {
 				
 			}
 		}
-	
-	
-	
 	}
+	
+	
 }
